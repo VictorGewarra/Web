@@ -1,0 +1,25 @@
+<?php
+function Redirect($url, $permanent = false)
+{	 
+    header('Location: ' . $url, true, $permanent ? 301 : 302);	 
+    exit();
+}
+
+ $seriename = filter_var($_POST['seriname'],FILTER_SANITIZE_STRING);
+ $Town = filter_var($_POST['Town'],FILTER_SANITIZE_STRING);
+ $region = filter_var($_POST['region'], FILTER_SANITIZE_STRING); 
+ if (strlen($seriename)<15)  Redirect('http://localhost/scoundrels.php', false);
+
+ $connection = mysqli_connect('localhost','root','315315','prime');
+  $check=mysqli_query($connection,"select * from enemies where region='$region'");
+  $checkrows=mysqli_num_rows($check);
+  if ($checkrows>0) { $connection->close();
+  Redirect('http://localhost/scoundrels.php', false);
+   }
+ $connection->query("INSERT INTO `enemies` (`seriename`, `region`, `Town`)
+   VALUES('$seriename', '$region', '$Town') ")or die(mysqli_error($connection));
+   $query = "SELECT * FROM `enemies`";
+$result = mysqli_query($connection ,$query);
+ Redirect('http://localhost/scoundrels.php', false);
+ 
+?> 
